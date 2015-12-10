@@ -50,6 +50,13 @@ module.exports = function(grunt) {
       // read the data file
       if (typeof dataFile === "string") {
         data = grunt.file.readJSON(dataFile, {encoding: 'utf8'});
+        data.tools = {
+          esc: {
+            html: function(arg) {
+              return arg;
+            }
+          }
+        }
       } else {
         // data object passed in
         data = dataFile;
