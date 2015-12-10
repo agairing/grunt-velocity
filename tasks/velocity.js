@@ -47,7 +47,15 @@ module.exports = function(grunt) {
 
       // read the data file
       var data = grunt.file.readJSON(dataFile, {encoding: 'utf8'});
-      
+
+      data.tools = {
+        esc: {
+          html:function(arg) {
+            return arg;
+          }
+        }
+      };
+
       // read the src file
       var src = grunt.file.read(srcFile);
      
