@@ -16,13 +16,13 @@ module.exports = function(grunt) {
   grunt.registerMultiTask('velocity', 'Grunt plugin to run velocity templates through a velocity engine in an un-opinionated way', function() {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options(),
-    Engine = require('velocity').Engine,
-      count = 0;
+        Engine = require('velocity').Engine,
+        count = 0;
 
     // Iterate over all specified file groups.
     this.files.forEach(function(f) {
-      
-      
+
+
       if (options.data && !grunt.file.exists(options.data)) {
         grunt.log.warn('Data file"' + options.data + '" not found.');
         return false;
@@ -30,35 +30,29 @@ module.exports = function(grunt) {
 
       f.src.forEach(function(file) {
         grunt.log.ok('Processing ' + file);
-        
+
         if (!grunt.file.exists(file)) {
           grunt.log.warn('Source file "' + file + '" not found.');
           return false;
         }
-        
-        parseVelocity(file, f.dest, Engine, options.data);
+
+        parseVelocity(file, f.dest, Engine, options.data, options.tools);
         count++;
       });
-      
+
       grunt.log.ok('Parsed ' + count + ' file(s)');
     });
-    
-    function parseVelocity(srcFile, dest, Engine, dataFile) {
+
+    function parseVelocity(srcFile, dest, Engine, dataFile, tools) {
 
       // read the data file
       var data = grunt.file.readJSON(dataFile, {encoding: 'utf8'});
 
-      data.tools = {
-        esc: {
-          html:function(arg) {
-            return arg;
-          }
-        }
-      };
+      data.tools = tools;
 
       // read the src file
       var src = grunt.file.read(srcFile);
-     
+
       var engine = new Engine({
         template: src
       });
